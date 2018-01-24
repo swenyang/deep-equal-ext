@@ -1,61 +1,46 @@
-# deep-equal
+# deep-equal-ext
 
-Node's `assert.deepEqual() algorithm` as a standalone module.
+Extends [`node-deep-equal`](https://github.com/substack/node-deep-equal) to support comparing these values:
 
-This module is around [5 times faster](https://gist.github.com/2790507)
-than wrapping `assert.deepEqual()` in a `try/catch`.
+- Function
+- RegExp
+- Getter
+- Setter
 
-[![browser support](https://ci.testling.com/substack/node-deep-equal.png)](https://ci.testling.com/substack/node-deep-equal)
+**Note that above values are compared by calling `toString()` and matching strings.**
 
-[![build status](https://secure.travis-ci.org/substack/node-deep-equal.png)](https://travis-ci.org/substack/node-deep-equal)
+# How To Use
 
-# example
-
-``` js
-var equal = require('deep-equal');
-console.dir([
-    equal(
-        { a : [ 2, 3 ], b : [ 4 ] },
-        { a : [ 2, 3 ], b : [ 4 ] }
-    ),
-    equal(
-        { x : 5, y : [6] },
-        { x : 5, y : 6 }
-    )
-]);
+```bash
+npm i --save deep-equal-ext
 ```
 
-# methods
+```js
+import deepEqualExt from 'deep-equal-ext'
 
-``` js
-var deepEqual = require('deep-equal')
+const objectA = {
+    reg: /\w+/,
+    func: function(a, b) { return a + b },
+    obj: { a : [ 2, 3 ], b : [ 4 ] },
+    get x() {
+        return this.mX
+    },
+    set x(v) {
+        this.mX = v
+    }
+}
+const objectB = {
+    reg: /\w+/,
+    func: function(a, b) { return a + b },
+    obj: { a : [ 2, 3 ], b : [ 4 ] },
+    get x() {
+        return this.mX
+    },
+    set x(v) {
+        this.mX = v
+    }
+}
+
+deepEqualExt(objectA, objectB) // true
 ```
 
-## deepEqual(a, b, opts)
-
-Compare objects `a` and `b`, returning whether they are equal according to a
-recursive equality algorithm.
-
-If `opts.strict` is `true`, use strict equality (`===`) to compare leaf nodes.
-The default is to use coercive equality (`==`) because that's how
-`assert.deepEqual()` works by default.
-
-# install
-
-With [npm](http://npmjs.org) do:
-
-```
-npm install deep-equal
-```
-
-# test
-
-With [npm](http://npmjs.org) do:
-
-```
-npm test
-```
-
-# license
-
-MIT. Derived largely from node's assert module.

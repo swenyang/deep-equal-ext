@@ -93,3 +93,24 @@ test('null == undefined', function (t) {
     t.notOk(equal(null, undefined, { strict: true }))
     t.end()
 })
+
+test('regexp', function (t) {
+    t.ok(equal(/\w+/, /\w+/), { strict: true })
+    t.end()
+})
+
+test('function', function (t) {
+    t.ok(equal(function(a, b) { return a + b }, function(a, b) { return a + b }), { strict: true })
+    t.end()
+})
+
+test('getter/setter', function (t) {
+    var a = { mX: 1 };
+    a.__defineGetter__('x', function() { return this.mX });
+    a.__defineSetter__('x', function(v) { this.mX = v });
+    var b = { mX: 1 };
+    b.__defineGetter__('x', function() { return this.mX });
+    b.__defineSetter__('x', function(v) { this.mX = v });
+    t.ok(equal(a, b), { strict: true })
+    t.end()
+})

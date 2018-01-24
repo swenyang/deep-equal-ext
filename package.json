@@ -1,7 +1,7 @@
 {
-  "name": "deep-equal",
-  "version": "1.0.1",
-  "description": "node's assert.deepEqual algorithm",
+  "name": "deep-equal-ext",
+  "version": "1.0.0",
+  "description": "Extend deep-equal to compare more values like function, regexp, getter, setter etc.",
   "main": "index.js",
   "directories": {
     "lib": ".",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/substack/node-deep-equal.git"
+    "url": "https://github.com/swenyang/deep-equal-ext"
   },
   "keywords": [
     "equality",
@@ -24,9 +24,8 @@
     "compare"
   ],
   "author": {
-    "name": "James Halliday",
-    "email": "mail@substack.net",
-    "url": "http://substack.net"
+    "name": "swenyang",
+    "email": "ywxpku@gmail.com"
   },
   "license": "MIT",
   "testling": {

@@ -8,7 +8,17 @@ var deepEqual = module.exports = function (actual, expected, opts) {
   if (actual === expected) {
     return true;
 
-  } else if (actual instanceof Date && expected instanceof Date) {
+  } 
+  // reg exp
+  else if (actual instanceof RegExp && expected instanceof RegExp) {
+    return actual.toString() === expected.toString()
+  }
+  // function
+  else if (typeof actual === 'function' && typeof expected === 'function') {
+    return actual.toString() === expected.toString()
+  }
+  // date
+  else if (actual instanceof Date && expected instanceof Date) {
     return actual.getTime() === expected.getTime();
 
   // 7.3. Other pairs that do not both pass typeof value == 'object',
@@ -67,8 +77,8 @@ function objEquiv(a, b, opts) {
     return true;
   }
   try {
-    var ka = objectKeys(a),
-        kb = objectKeys(b);
+    var ka = typeof a === 'object' ? Object.getOwnPropertyNames(a) : objectKeys(a),
+        kb = typeof b === 'object' ? Object.getOwnPropertyNames(b) : objectKeys(b);
   } catch (e) {//happens when one is a string literal and the other isn't
     return false;
   }
@@ -88,7 +98,19 @@ function objEquiv(a, b, opts) {
   //~~~possibly expensive deep test
   for (i = ka.length - 1; i >= 0; i--) {
     key = ka[i];
-    if (!deepEqual(a[key], b[key], opts)) return false;
+
+    // getter setter
+    var da = Object.getOwnPropertyDescriptor(a, key);
+    var db = Object.getOwnPropertyDescriptor(b, key);
+    if (da.get || da.set || db.get || db.set) {
+        if (da.get || db.get) {
+            if (!deepEqual(da.get, db.get)) return false;
+        }
+        if (da.set || db.set) {
+            if (!deepEqual(da.set, db.set)) return false;
+        }
+    }
+    else if (!deepEqual(a[key], b[key], opts)) return false;
   }
   return typeof a === typeof b;
 }
